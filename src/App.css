@@ -1,0 +1,26 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+@media print {
+  /* Remove default header and footer (which may include timestamp) */
+  @page {
+    margin: 0;
+  }
+
+  /* Hide unwanted elements during print
+  body {
+    margin: 0;
+  } */
+
+  /* You can also hide the print button */
+  .print-button {
+    display: none;
+  }
+
+  /* Optional: Hide any elements you don't want to show during printing */
+  .no-print {
+    display: none;
+  }
+}
