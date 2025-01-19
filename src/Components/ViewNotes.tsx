@@ -45,7 +45,7 @@ const ViewNotes: React.FC = () => {
     <div className="w-full flex flex-col justify-center items-center font-semibold">
       <Navbar />
       <div className="w-[90%] mt-10 lg:w-[70%] flex flex-col justify-start items-center border-2 rounded-lg shadow-xl">
-        <div className="flex justify-end mt-5 w-full pr-5">
+        <div className="flex justify-end mt-5 w-full pr-5 print:hidden">
           <button
             onClick={printTable}
             className="bg-blue-500 text-white px-4 py-2 rounded-md float-end"

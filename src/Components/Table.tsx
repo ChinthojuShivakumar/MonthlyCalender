@@ -8,6 +8,7 @@ interface TableProps {
 
 const Table: React.FC<TableProps> = ({ month, year }) => {
   const [notes, setNotes] = useState<{ [key: string]: string }>({});
+  const [promptedDates, setPromptedDates] = useState<Set<string>>(new Set());
   const navigate = useNavigate();
 
   // Load notes from localStorage on component mount
@@ -36,6 +37,16 @@ const Table: React.FC<TableProps> = ({ month, year }) => {
 
   const daysInMonth = getDaysInMonth(month, year);
 
+  // Split the days into two halves (first and second half of the month)
+  const firstHalfDays = Array.from(
+    { length: Math.ceil(daysInMonth / 2) },
+    (_, i) => i + 1
+  );
+  const secondHalfDays = Array.from(
+    { length: Math.floor(daysInMonth / 2) },
+    (_, i) => i + Math.ceil(daysInMonth / 2) + 1
+  );
+
   const handleNoteChange = (date: string, value: string) => {
     setNotes((prev) => {
       const updatedNotes = { ...prev };
@@ -53,9 +64,27 @@ const Table: React.FC<TableProps> = ({ month, year }) => {
     alert("Notes saved successfully!");
   };
 
-  // Split the days into two halves (first and second half of the month)
-  const firstHalfDays = Array.from({ length: Math.ceil(daysInMonth / 2) }, (_, i) => i + 1);
-  const secondHalfDays = Array.from({ length: Math.floor(daysInMonth / 2) }, (_, i) => i + Math.ceil(daysInMonth / 2) + 1);
+  // Handle the focus event for small screens
+  const handleFocus = (date: string) => {
+    if (window.innerWidth <= 1024) {
+      // Check if the date has already been prompted
+      if (!promptedDates.has(date)) {
+        const existingNote = notes[date] || "";
+        const userNote = prompt(
+          existingNote ? "Edit the note:" : "Would you like to add a note?",
+          existingNote
+        );
+
+        if (userNote !== null) {
+          handleNoteChange(date, userNote); // Update the state with the new note
+          localStorage.setItem("calendarNotes", JSON.stringify(notes)); // Save directly to local storage
+        }
+
+        // Add the date to the prompted set to prevent future prompts for this date
+        setPromptedDates((prev) => new Set(prev).add(date));
+      }
+    }
+  };
 
   return (
     <div className="w-full flex justify-center items-center font-semibold">
@@ -94,57 +123,106 @@ const Table: React.FC<TableProps> = ({ month, year }) => {
             </thead>
             <tbody>
               {/* Combine both halves into one table */}
-              {Array.from({ length: Math.max(firstHalfDays.length, secondHalfDays.length) }, (_, i) => (
-                <tr key={i}>
-                  {/* First Half */}
-                  <td
-                    className={`border-2 border-black px-4 py-2 ${
-                      firstHalfDays[i] && new Date(year, month, firstHalfDays[i]).getDay() === 0 ? "text-red-500 font-bold" : ""
-                    }`}
-                  >
-                    {firstHalfDays[i] && (
-                      <>
-                        <p>{new Date(year, month, firstHalfDays[i]).toLocaleString("default", { weekday: "long" })}</p>
-                        <p>{formatDate(month, firstHalfDays[i], year)}</p>
-                      </>
-                    )}
-                  </td>
-                  <td className="border-2 border-black px-4 py-2">
-                    {firstHalfDays[i] && (
-                      <textarea
-                        value={notes[formatDate(month, firstHalfDays[i], year)] || ""}
-                        onChange={(e) => handleNoteChange(formatDate(month, firstHalfDays[i], year), e.target.value)}
-                        className="w-full px-2 py-1 border rounded resize-none h-16"
-                        placeholder=""
-                      />
-                    )}
-                  </td>
+              {Array.from(
+                {
+                  length: Math.max(firstHalfDays.length, secondHalfDays.length),
+                },
+                (_, i) => (
+                  <tr key={i}>
+                    {/* First Half */}
+                    <td
+                      className={`border-2 border-black px-4 py-2 ${
+                        firstHalfDays[i] &&
+                        new Date(year, month, firstHalfDays[i]).getDay() === 0
+                          ? "text-red-500 font-bold"
+                          : ""
+                      }`}
+                    >
+                      {firstHalfDays[i] && (
+                        <>
+                          <p>
+                            {new Date(
+                              year,
+                              month,
+                              firstHalfDays[i]
+                            ).toLocaleString("default", { weekday: "long" })}
+                          </p>
+                          <p>{formatDate(month, firstHalfDays[i], year)}</p>
+                        </>
+                      )}
+                    </td>
+                    <td className="border-2 border-black px-4 py-2">
+                      {firstHalfDays[i] && (
+                        <textarea
+                          value={
+                            notes[formatDate(month, firstHalfDays[i], year)] ||
+                            ""
+                          }
+                          onChange={(e) =>
+                            handleNoteChange(
+                              formatDate(month, firstHalfDays[i], year),
+                              e.target.value
+                            )
+                          }
+                          onFocus={() =>
+                            handleFocus(
+                              formatDate(month, firstHalfDays[i], year)
+                            )
+                          }
+                          className="w-full px-2 py-1 border rounded resize-none h-16"
+                          placeholder=""
+                        />
+                      )}
+                    </td>
 
-                  {/* Second Half */}
-                  <td
-                    className={`border-2 border-black px-4 py-2 ${
-                      secondHalfDays[i] && new Date(year, month, secondHalfDays[i]).getDay() === 0 ? "text-red-500 font-bold" : ""
-                    }`}
-                  >
-                    {secondHalfDays[i] && (
-                      <>
-                        <p>{new Date(year, month, secondHalfDays[i]).toLocaleString("default", { weekday: "long" })}</p>
-                        <p>{formatDate(month, secondHalfDays[i], year)}</p>
-                      </>
-                    )}
-                  </td>
-                  <td className="border-2 border-black px-4 py-2">
-                    {secondHalfDays[i] && (
-                      <textarea
-                        value={notes[formatDate(month, secondHalfDays[i], year)] || ""}
-                        onChange={(e) => handleNoteChange(formatDate(month, secondHalfDays[i], year), e.target.value)}
-                        className="w-full px-2 py-1 border rounded resize-none h-16"
-                        placeholder=""
-                      />
-                    )}
-                  </td>
-                </tr>
-              ))}
+                    {/* Second Half */}
+                    <td
+                      className={`border-2 border-black px-4 py-2 ${
+                        secondHalfDays[i] &&
+                        new Date(year, month, secondHalfDays[i]).getDay() === 0
+                          ? "text-red-500 font-bold"
+                          : ""
+                      }`}
+                    >
+                      {secondHalfDays[i] && (
+                        <>
+                          <p>
+                            {new Date(
+                              year,
+                              month,
+                              secondHalfDays[i]
+                            ).toLocaleString("default", { weekday: "long" })}
+                          </p>
+                          <p>{formatDate(month, secondHalfDays[i], year)}</p>
+                        </>
+                      )}
+                    </td>
+                    <td className="border-2 border-black px-4 py-2">
+                      {secondHalfDays[i] && (
+                        <textarea
+                          value={
+                            notes[formatDate(month, secondHalfDays[i], year)] ||
+                            ""
+                          }
+                          onChange={(e) =>
+                            handleNoteChange(
+                              formatDate(month, secondHalfDays[i], year),
+                              e.target.value
+                            )
+                          }
+                          onFocus={() =>
+                            handleFocus(
+                              formatDate(month, secondHalfDays[i], year)
+                            )
+                          }
+                          className="w-full px-2 py-1 border rounded resize-none h-16"
+                          placeholder=""
+                        />
+                      )}
+                    </td>
+                  </tr>
+                )
+              )}
             </tbody>
           </table>
         </div>
