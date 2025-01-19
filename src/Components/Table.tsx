@@ -126,7 +126,7 @@ const Table: React.FC<TableProps> = ({ month, year }) => {
           <table className="w-full print:w-full text-sm md:text-base">
             <thead>
               <tr>
-                <th className="border-2 border-black px-2 md:px-4 py-2">Date</th>
+                <th className="border-2  border-black px-2 md:px-4 py-2">Date</th>
                 <th className="border-2 border-black px-2 md:px-4 py-2">Day</th>
                 <th className="border-2 border-black px-2 md:px-4 py-2">Note</th>
               </tr>
