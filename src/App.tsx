@@ -14,7 +14,7 @@ function App() {
     <div className="w-full">
       <Navbar />
       <div className="w-full flex justify-center items-center">
-        <div className="flex justify-between items-center gap-4 mb-4 font-semibold print:hidden w-[60%]">
+        <div className="flex justify-between items-center gap-4 mb-4 font-semibold print:hidden w-[60%] max-sm:w-full sm:max-xl:w-full max-sm:px-5 sm:max-xl:px-5">
           <label>
             Month:
             <select
