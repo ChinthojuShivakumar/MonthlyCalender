@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface TableProps {
   month: number;
@@ -7,6 +8,7 @@ interface TableProps {
 
 const Table: React.FC<TableProps> = ({ month, year }) => {
   const [notes, setNotes] = useState<{ [key: string]: string }>({});
+  const navigate = useNavigate()
 
   // Load notes from localStorage on component mount
   useEffect(() => {
@@ -78,13 +80,22 @@ const Table: React.FC<TableProps> = ({ month, year }) => {
   const daysInMonth = getDaysInMonth(month, year);
 
   const handleNoteChange = (date: string, value: string) => {
-    setNotes((prev) => ({ ...prev, [date]: value }));
+    setNotes((prev) => {
+      const updatedNotes = { ...prev };
+      if (value.trim() === "") {
+        delete updatedNotes[date]; // Remove the date key if the value is empty
+      } else {
+        updatedNotes[date] = value; // Otherwise, update the note
+      }
+      return updatedNotes;
+    });
   };
-
+  
   const saveNotes = () => {
     localStorage.setItem("calendarNotes", JSON.stringify(notes));
     alert("Notes saved successfully!");
   };
+  
 
   return (
     <div className="w-full flex justify-center items-center font-semibold">
@@ -95,12 +106,18 @@ const Table: React.FC<TableProps> = ({ month, year }) => {
           </h1>
         </div>
           {/* Save Button */}
-          <div className="w-full flex justify-end px-4 md:px-10 mt-5">
+        <div className="w-full flex justify-end px-4 md:px-10 mt-5 gap-5">
           <button
             onClick={saveNotes}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
           >
             Save Notes
+          </button>
+          <button
+            onClick={() => navigate("/view")}
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md"
+          >
+            View Notes
           </button>
         </div>
 
