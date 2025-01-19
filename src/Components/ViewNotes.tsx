@@ -21,7 +21,7 @@ const ViewNotes: React.FC = () => {
     // Split date and validate format
     const dateParts = date.split("/");
     if (dateParts.length === 3) {
-      const [day, month, year] = dateParts;
+      const [, month, year] = dateParts;
       const monthYear = `${new Date(
         Number(year),
         Number(month) - 1
