@@ -156,11 +156,11 @@ const Table: React.FC<TableProps> = ({ month, year }) => {
                       {dayName}
                     </td>
                     <td className="border-2 border-black px-2 md:px-4 py-2">
-                      <input
-                        type="text"
+                      <textarea
+                   
                         value={notes[dateKey] || ""}
                         onChange={(e) => handleNoteChange(dateKey, e.target.value)}
-                        className="w-full px-2 py-1 border rounded print:placeholder:none print:border-none"
+                        className="w-full px-2 py-1 border rounded print:placeholder:none print:border-none resize-none h-16"
                         placeholder=""
                       />
                     </td>
