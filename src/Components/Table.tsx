@@ -106,7 +106,7 @@ const Table: React.FC<TableProps> = ({ month, year }) => {
           </h1>
         </div>
           {/* Save Button */}
-        <div className="w-full flex justify-end px-4 md:px-10 mt-5 gap-5">
+        <div className="w-full flex justify-end px-4 md:px-10 mt-5 gap-5 print:hidden">
           <button
             onClick={saveNotes}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
@@ -160,8 +160,8 @@ const Table: React.FC<TableProps> = ({ month, year }) => {
                         type="text"
                         value={notes[dateKey] || ""}
                         onChange={(e) => handleNoteChange(dateKey, e.target.value)}
-                        className="w-full px-2 py-1 border rounded"
-                        placeholder="Add a note..."
+                        className="w-full px-2 py-1 border rounded print:placeholder:none print:border-none"
+                        placeholder=""
                       />
                     </td>
                   </tr>
