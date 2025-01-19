@@ -37,10 +37,22 @@ const ViewNotes: React.FC = () => {
     }
   });
 
+  const printTable = () => {
+    window.print();
+  };
+
   return (
     <div className="w-full flex flex-col justify-center items-center font-semibold">
       <Navbar />
       <div className="w-[90%] mt-10 lg:w-[70%] flex flex-col justify-start items-center border-2 rounded-lg shadow-xl">
+        <div className="flex justify-end mt-5 w-full pr-5">
+          <button
+            onClick={printTable}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md float-end"
+          >
+            Print
+          </button>
+        </div>
         <div className="w-full text-center mt-5 font-bold text-2xl md:text-4xl">
           <h1>Saved Notes</h1>
         </div>

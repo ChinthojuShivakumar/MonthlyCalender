@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0;
   padding: 0;
 }
@@ -23,4 +23,69 @@
   .no-print {
     display: none;
   }
+}
+
+table {
+  width: 100%;
+  table-layout: auto; /* Let the browser adjust column widths */
+}
+
+th,
+td {
+  word-wrap: break-word;
+}
+
+/* Date column should fit its content */
+td:first-child,
+th:first-child {
+  width: auto; /* Let it fit content */
+}
+
+/* Notes column should take the remaining space */
+td:last-child,
+th:last-child {
+  width: 100%; /* Take up the remaining space */
+}
+@media print {
+  table {
+    width: 100%;
+    table-layout: auto; /* Let the browser adjust column widths */
+  }
+
+  th,
+  td {
+    word-wrap: break-word;
+  }
+
+  /* Date column should fit its content */
+  td:first-child,
+  th:first-child {
+    width: auto; /* Let it fit content */
+    font-size: 18px; /* Increase font size for Date column */
+  }
+
+  /* Notes column should take the remaining space */
+  td:last-child,
+  th:last-child {
+    width: 100%; /* Take up the remaining space */
+  }
+}
+table {
+  width: 100%;
+}
+
+th, td {
+  padding: 1rem;
+}
+
+th {
+  text-align: left;
+}
+
+td {
+  width: auto;
+}
+
+td:nth-child(2), td:nth-child(4) {
+  width: 50%; /* Equal width for second and fourth columns */
 }
