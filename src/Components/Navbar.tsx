@@ -8,7 +8,7 @@ const Navbar:FC = () => {
         alt="mata"
         className="w-20 h-20 rounded-full object-fit"
       />
-      <h1 className="text-2xl text-white max-sm:text-sm sm:max-xl:text-balance">Sri Gayatri Jyothishyalam</h1>
+      <h1 className="text-2xl text-white max-sm:text-sm sm:max-xl:text-balance">Sri Gayatri Jyothishyaalayam</h1>
     </div>
   );
 };
